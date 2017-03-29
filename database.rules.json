@@ -1,0 +1,15 @@
+// Default Rules
+// {
+//   "rules": {
+//     ".read": "auth != null",
+//     ".write": "auth != null"
+//   }
+// }
+
+// Public Rules
+{
+  "rules": {
+    ".read": true,
+    ".write": true
+  }
+}

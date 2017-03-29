@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>20scoopsClawMachine</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+    <div class="row" style="margin-top: 30px">
+        <div class="col-md-9">
+            <iframe src="https://appear.in/20scoopscnx" style="width: 100%; height: 360px" frameborder="0"></iframe>
+        </div>
+        <div class="col-md-3">
+            <h4>Rules</h4>
+            <ol>
+                <li>
+                    Click "Enter room" button to see Claw Machine
+                </li>
+                <li>
+                    Wait status go "Online"
+                </li>
+                <li>
+                    Click Start if you ready!
+                </li>
+            </ol>
+        </div>
+    </div>
+
+    <h3 style="color: red" id="mqtt-status">Offline</h3>
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-3">
+            <button onmousedown="publish('4')" onmouseup="publish('0')" type="button" class="btn btn-default btn-lg"
+                    aria-label="Up Align">
+                <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+            </button>
+        </div>
+        <div class="col-md-3"></div>
+        <div class="col-md-3">
+            <button id="start" type="button" class="btn btn-default  btn-lg" onclick="publish('6')" disabled>Start
+            </button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <button onmousedown="publish('1')" onmouseup="publish('0')" type="button" class="btn btn-default btn-lg"
+                    aria-label="Left Align">
+                <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
+            </button>
+        </div>
+        <div class="col-md-3"></div>
+        <div class="col-md-3">
+            <button onmousedown="publish('2')" onmouseup="publish('0')" type="button" class="btn btn-default btn-lg"
+                    aria-label="Right Align">
+                <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
+            </button>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-3">
+            <button onmousedown="publish('3')" onmouseup="publish('0')" type="button" class="btn btn-default btn-lg"
+                    aria-label="Down Align">
+                <span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
+            </button>
+        </div>
+        <div class="col-md-3"></div>
+        <div class="col-md-3">
+            <button type="button" class="btn btn-default  btn-lg" onclick="publish('5')">Catch</button>
+        </div>
+    </div>
+</div>
+</body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+<!--<script src="http://www.hivemq.com/demos/websocket-client/js/mqttws31.js" type="text/javascript"></script>-->
+<script src="https://cdn.netpie.io/microgear.js"></script>
+<script type="text/javascript">
+    //    var protocol = 'netpie';
+    //
+    //    if (protocol == 'mqtt') {
+    //        //Using the HiveMQ public Broker, with a random client Id
+    //        var client = new Messaging.Client("broker.mqttdashboard.com", 8000, "myclientid_" + parseInt(Math.random() * 100, 10));
+    //
+    //        //Gets  called if the websocket/mqtt connection gets disconnected for any reason
+    //        client.onConnectionLost = function (responseObject) {
+    //            //Depending on your scenario you could implement a reconnect logic here
+    //            alert("connection lost: " + responseObject.errorMessage);
+    //        };
+    //
+    //        //Gets called whenever you receive a message for your subscriptions
+    //        client.onMessageArrived = function (message) {
+    //            //Do something with the push message you received
+    //            $('#messages').append('<span>Topic: ' + message.destinationName + '  | ' + message.payloadString + '</span><br/>');
+    //        };
+    //
+    //        function connect() {
+    //            client.connect({
+    //                timeout: 3,
+    //                //Gets Called if the connection has sucessfully been established
+    //                onSuccess: function () {
+    //                    console.log("Connected");
+    //                    $('#start').prop('disabled', false);
+    //                    $('#mqtt-status').text('Online').prop('style', 'color: green');
+    //                },
+    //                //Gets Called if the connection could not be established
+    //                onFailure: function (message) {
+    //                    console.log("Connection failed: " + message.errorMessage);
+    //                    $('#start').prop('disabled', true);
+    //                    $('#mqtt-status').text('Offline').prop('style', 'color: red');
+    //                    connect();
+    //                }
+    //            });
+    //        }
+    //
+    //        $(document).ready(function () {
+    //            connect();
+    //
+    //        });
+    //
+    //        //Creates a new Messaging.Message Object and sends it to the HiveMQ MQTT Broker
+    //        var publish = function (payload) {
+    //            //Send your message (also possible to serialize it as JSON or protobuf or just use a string, no limitations)
+    //            var message = new Messaging.Message(payload);
+    //            message.destinationName = '20scoopsClawMachine';
+    //            message.qos = 2;
+    //            client.send(message);
+    //        }
+    //    }
+    //
+    //    if (protocol == 'netpie') {
+    var APPID = "20scoopsSmartHome";
+    var APPKEY = "9m6JZvFwYd42YWR";
+    var APPSECRET = "tRH075AnfqAi6Z2XY62TyDyjZ";
+    var topic = '/gearname/claw_machine';
+
+    var microgear = Microgear.create({
+        key: APPKEY,
+        secret: APPSECRET,
+        alias: "claw_machine"
+    });
+
+    microgear.on('connected', function () {
+        microgear.setAlias('claw_machine');
+        $('#start').prop('disabled', false);
+        $('#mqtt-status').text('Online').prop('style', 'color: green');
+
+        setInterval(function () {
+            microgear.chat("claw_machine", "Hello from myself at " + Date.now());
+        }, 5000);
+    });
+
+    function publish(msg) {
+        console.log(topic, msg);
+        microgear.publish(topic, msg);
+    }
+
+    microgear.connect(APPID);
+    //    }
+
+    $(document).ready(function () {
+        document.getElementsByTagName('body')[0].addEventListener('keydown', function (key) {
+            if (key.keyCode == 37) { // left
+                console.log('left');
+                publish('1');
+            } else if (key.keyCode == 38) { // up
+                console.log('up');
+                publish('4');
+            } else if (key.keyCode == 39) { // right
+                console.log('right');
+                publish('2');
+            } else if (key.keyCode == 40) { // down
+                console.log('down');
+                publish('3');
+            } else if (key.keyCode == 32) { // enter
+                publish('5');
+            } else if (key.keyCode == 13) { // space bar
+                publish('6');
+            }
+        });
+
+        document.getElementsByTagName('body')[0].addEventListener('keyup', function (key) {
+            publish('0');
+        });
+    });
+</script>
+</html>
